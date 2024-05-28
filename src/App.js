@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useState } from 'react';
+import Machine from './components/Machine'; 
+import CreatePoem from './components/CreatePoem'; 
 
 function App() {
+
+  const [poems, setPoems] = useState([]);
+  const [currentPoem, setCurrentPoem] = useState('');
+
+  const generateNewPoem = async () => {
+    const newPoem = await CreatePoem();
+    setCurrentPoem(newPoem);
+    setPoems([...poems, newPoem]);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={generateNewPoem}>Generate New Poem</button>
       </header>
+      <div>{currentPoem? <Machine poem={currentPoem} /> : 'No poem generated yet.'}</div>
+        {poems.map((poem, index) => (
+          <h1 key={index}>{poem}</h1>
+        ))}
     </div>
   );
 }
